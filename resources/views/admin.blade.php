@@ -75,40 +75,53 @@
                                                 <th scope="col">Keterangan</th>
                                                 <th scope="col">Waktu</th>
                                                 <th scope="col">Aksi</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($aspirasi as $as)
-                                            <tr>
+                                            <tr class="align-middle">
                                                 <th scope="row">{{ $as->id_aspirasi }}</th>
                                                 <td>{{ $as->input_aspirasi->siswa->nama }}</td>
                                                 <td>{{ $as->kategori->ket_kategori }}</td>
                                                 <td>{{ $as->input_aspirasi->lokasi }}</td>
                                                 <td>{{ $as->input_aspirasi->ket }}</td>
                                                 <td>{{ $as->created_at}}</td>
-                                                <td>  @if ($as['status'] == 'Menunggu')
+                                                {{-- Status --}}
+                                                <td>  
+                                                    @if ($as['status'] == 'Menunggu')
                                                     <form action="/admin/status" method="post">
                                                         @csrf
                                                         <input type="hidden" name="status" value="Proses">
                                                         <input type="hidden" name="id_aspirasi"
                                                             value="{{ $as->id_aspirasi }}">
                                                         <button type="submit"
-                                                            class="btn btn-primary btn-sm mb-3 w-100">Proses</button>
+                                                            class="btn btn-outline-primary w-100">Proses</button>
                                                     </form>
-                                                @elseif($as['status'] == 'Proses')
-                                                <form action="/admin/status" method="post">
-                                                    @csrf
-                                                    <input type="hidden" name="status" value="Selesai">
-                                                    <input type="hidden" name="id_aspirasi"
-                                                        value="{{ $as->id_aspirasi }}">
+                                                    @elseif($as['status'] == 'Proses')
+                                                    <form action="/admin/status" method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="status" value="Selesai">
+                                                        <input type="hidden" name="id_aspirasi"
+                                                            value="{{ $as->id_aspirasi }}">
+                                                        <button type="submit"
+                                                            class="btn btn-outline-success w-100">Selesai</button>
+                                                    </form>
+                                                    @else
                                                     <button type="submit"
-                                                        class="btn btn-success btn-sm mb-3 w-100">Selesai</button>
-                                                </form>
-                                                @else
-                                                <button type="submit"
-                                                class="btn btn-secondary btn-sm mb-3 w-100" disabled>Selesai</button>
-                                                @endif
+                                                    class="btn btn-outline-secondary w-100" disabled>Selesai</button>
+                                                    @endif
+                                                    {{-- End Status --}}
                                                 </td>
+                                                {{-- Delete --}}
+                                                <td>
+                                                    <form action="/admin/delete" method="post">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $as->id_aspirasi }}">
+                                                    <button type="submit" class="btn btn-outline-danger">Delete</button>
+                                                    </form>
+                                                </td>
+                                                {{-- End Delete --}}
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -149,8 +162,8 @@
                                                 <td>{{ $as->input_aspirasi->lokasi }}</td>
                                                 <td>{{ $as->input_aspirasi->ket }}</td>
                                                 <td>{{ $as->created_at}}</td>
-                                                <td> <div class=" text-center fw-bold">
-                                                    {{ $as->feedback }}
+                                                <td> <div class="fw-bold">
+                                                    {{ $as->feedback }} <i class="bi bi-star-fill"></i>
                                                 </div>
                                                 </td>
                                             </tr>
